@@ -1,0 +1,12 @@
+# Inventory of experiments/exp_d/results -- committed raw outputs (Git LFS).
+# 10 files. Regenerate/verify with: python3 -m experiments.check_manifests
+gp_direct_seed00.json
+gp_direct_seed01.json
+gp_direct_seed02.json
+gp_direct_seed03.json
+gp_direct_seed04.json
+gp_dmci_seed00.json
+gp_dmci_seed01.json
+gp_dmci_seed02.json
+gp_dmci_seed03.json
+gp_dmci_seed04.json

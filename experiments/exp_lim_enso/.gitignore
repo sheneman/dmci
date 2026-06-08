@@ -1,0 +1,14 @@
+# run artifacts -- reproducible from code, not version-controlled
+__pycache__/
+*.pyc
+gate_*.json
+logs/*.out
+logs/*.err
+results/*.csv
+# NOTE: the per-run records results/*.json (one per method x structure x D x seed) ARE
+# version-controlled (~3.5 MB, plain git): they are the provenance from which aggregate.py
+# rebuilds the corrected T1-T5 tables, so a repo-only reviewer can regenerate every LIM-ENSO
+# aggregate without the cluster. (gate_*.json scratch stays ignored above; agg/*.csv are tracked.)
+# NOTE: llm_cache/*.json (the accepted LLM-emitted Scheme per structure) IS version-controlled:
+# it is the program-as-data experimental artifact, so reruns load the exact generated programs
+# (one MindRouter hit per structure) rather than re-querying a non-deterministic API.

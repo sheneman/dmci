@@ -1,0 +1,52 @@
+============================================================
+DMCI -- Experiment K (FluZoo): influenza program-and-parameter
+co-search and the fitness-fidelity stress test.
+results/ artifact MANIFEST -> manuscript claim map.
+Manuscript: paper-arxiv/paper.tex  Section 4.5 (the stress-test paragraph)
+            + Appendix K (app:exp_fluzoo_ext) + Appendix R fitness-fidelity protocol.
+Data provenance: ../data/processed/metadata.json (CDC ILINet via Delphi Epidata,
+            SHA256-pinned, epiweek window 201040-202539, 11 HHS regions).
+============================================================
+
+THE REPORTED CAMPAIGN (these back every Appendix-K number)
+
+  baseline_test.json
+     The rigorous CONSISTENT-PROTOCOL re-score (300 Adam steps, rolling forecast
+     origins, initial-condition refit) of the evolved winner vs the hand-written
+     baselines -- the core of the fitness-fidelity finding:
+       initial_seed / seir_regional : val 0.01488  test 0.01805   (the SEIR seed)
+       seirs_regional               : val 0.01473  test 0.01856
+       evolved_best                 : val 0.01477  test 0.01812
+     => the evolved program TIES the hand SEIR on both held-out splits once the inner
+        fitness is converged (manuscript: "0.0148 vs 0.0149" val, "0.0181 vs 0.0181" test).
+
+  _pool_124_125/oe_pool_summary.json
+     The OpenEvolve campaign result. global_best = oe_island_2: search-time
+     validation RMSE 0.0100 (cheap 60-step fitness), 4 compartments, 11 parameters,
+     a spatial mean-field-coupling structure with dual exposed/infectious reporting.
+     Held-out test correlation by horizon: h1 0.80, h2 0.81, h3 0.84, h4 0.87.
+     This 0.0100 is the APPARENT win that vanishes under the 300-step re-score above.
+
+  oe_island_{0,1,2}/best/best_program.py (+ best_program_info.json)
+     The per-island OpenEvolve winners (Scheme/DSL program + metrics). island_2 is the
+     global best re-scored in baseline_test.json as "evolved_best".
+
+SEARCH CONFIGURATION
+  Outer : OpenEvolve, 3 islands x 200 iterations, Qwen-3.6 mutator, seeded from a
+          regional SEIR (openevolve/initial_program.py).
+  Inner : DMCI exact-gradient Adam; adam_iters=60 during SEARCH (the under-converged
+          proxy), re-scored at adam_iters=300 (baseline_test.json) -- the protocol that
+          exposes the fitness-fidelity pitfall.
+  Selection seasons: val {2018,2021,2022}; test {2023,2024}.
+
+REGENERATION
+  data        : data.build_data (Delphi fluview, pinned in data/processed/metadata.json)
+  search      : openevolve/run_oe.py / pool_oe.py  (slurm_oe.sh, slurm_oe_islands.sh) -> oe_island_*/, _pool_*/
+  re-score    : openevolve/baseline_test.py -> baseline_test.json
+  All search/re-score runs are HPC. LLM mutation is non-deterministic; the committed
+  winners + baseline_test.json are the binding record of the reported run.
+
+----------------------------------------------------------------
+smoke_pilot/   <-- NOT the campaign. An early 4-program / 1-generation pilot produced by
+                   run_all.py + aggregate.py, kept for provenance only. See its README.
+                   Do not cite its numbers (test ~0.0367, NaN corr); they are the pilot.

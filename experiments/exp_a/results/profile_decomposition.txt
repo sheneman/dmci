@@ -1,0 +1,81 @@
+Program: multi_const
+Expression: (+ (* alpha x) beta)
+Iterations: 100
+Python: 3.8.13 (default, Mar 28 2022, 11:38:47) 
+[GCC 7.5.0]
+PyTorch: 1.13.1+cu117
+Device: cpu
+
+Compiling direct mode...
+  Direct compilation: 0.00s
+Compiling DMCI mode...
+  DMCI compilation:   0.05s
+  Compile ratio:      10.6x
+
+Profiling direct mode (100 iters)...
+Profiling DMCI mode (100 iters)...
+
+========================================================================
+  Direct — 100 iterations
+========================================================================
+  Total wall time:            43.9 ms  (0.439 ms/iter)
+  Forward pass total:         25.1 ms  (0.251 ms/iter)
+  Backward pass total:        17.9 ms  (0.179 ms/iter)
+  Fwd/Bwd ratio:              1.40x
+────────────────────────────────────────────────────────────────────────
+  Component                               Time (ms)   Fraction    ms/iter
+  ────────────────────────────────────── ────────── ────────── ──────────
+  Tagged-value wrap/unwrap                      8.6      60.3%      0.086
+  Heap operations (cons/car/cdr)                0.0       0.0%      0.000
+  Dispatch (tagged_if/eq?/select)               0.0       0.0%      0.000
+  Tagged arithmetic wrappers                    0.0       0.0%      0.000
+  Raw arithmetic primitives                     2.2      15.2%      0.022
+  Evaluator graph walking                       1.7      11.6%      0.017
+  PyTorch runtime / autograd                    1.8      12.9%      0.018
+  (other / Python overhead)                    29.6      67.5%      0.296
+  ────────────────────────────────────── ────────── ────────── ──────────
+  TOTAL (profiled categories)                  14.3     100.0%      0.143
+========================================================================
+
+========================================================================
+  DMCI — 100 iterations
+========================================================================
+  Total wall time:           604.0 ms  (6.040 ms/iter)
+  Forward pass total:        575.8 ms  (5.758 ms/iter)
+  Backward pass total:        27.3 ms  (0.273 ms/iter)
+  Fwd/Bwd ratio:             21.11x
+────────────────────────────────────────────────────────────────────────
+  Component                               Time (ms)   Fraction    ms/iter
+  ────────────────────────────────────── ────────── ────────── ──────────
+  Tagged-value wrap/unwrap                    240.4      60.9%      2.404
+  Heap operations (cons/car/cdr)               30.0       7.6%      0.300
+  Dispatch (tagged_if/eq?/select)              12.5       3.2%      0.125
+  Tagged arithmetic wrappers                   10.8       2.7%      0.108
+  Raw arithmetic primitives                     2.5       0.6%      0.025
+  Evaluator graph walking                      96.5      24.5%      0.965
+  PyTorch runtime / autograd                    1.9       0.5%      0.019
+  (other / Python overhead)                   209.4      34.7%      2.094
+  ────────────────────────────────────── ────────── ────────── ──────────
+  TOTAL (profiled categories)                 394.6     100.0%      3.946
+========================================================================
+
+========================================================================
+  OVERHEAD DECOMPOSITION: DMCI / Direct
+========================================================================
+  Direct:  43.9 ms total  (0.439 ms/iter)
+  DMCI:    604.0 ms total  (6.040 ms/iter)
+  Ratio:   13.8x
+────────────────────────────────────────────────────────────────────────
+  Overhead: 560.1 ms (5.601 ms/iter)
+
+  Component                                Direct     DMCI    Delta  % of OH
+  ────────────────────────────────────── ──────── ──────── ──────── ────────
+  Tagged-value wrap/unwrap                    8.6    240.4   +231.7    41.4%
+  Heap operations (cons/car/cdr)              0.0     30.0    +30.0     5.4%
+  Dispatch (tagged_if/eq?/select)             0.0     12.5    +12.5     2.2%
+  Tagged arithmetic wrappers                  0.0     10.8    +10.8     1.9%
+  Raw arithmetic primitives                   2.2      2.5     +0.3     0.1%
+  Evaluator graph walking                     1.7     96.5    +94.8    16.9%
+  PyTorch runtime / autograd                  1.8      1.9     +0.1     0.0%
+  (other / Python overhead)                  29.6    209.4   +179.8    32.1%
+========================================================================

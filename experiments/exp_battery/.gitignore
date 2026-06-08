@@ -1,0 +1,11 @@
+# Binary data + build artifacts: regenerate via the loaders; do not version.
+__pycache__/
+*.pyc
+*.pkl
+*.npz
+data/raw/
+results/*.pt
+# ... except the small committed search targets (the experiment's binding input data;
+# target_real.pt is the real Severson SOH target, see data/metadata.json for provenance).
+!results/target.pt
+!results/target_real.pt

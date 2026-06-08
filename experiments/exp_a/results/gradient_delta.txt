@@ -1,0 +1,115 @@
+Gradient Delta Analysis: DMCI vs. Direct Compilation
+  n_samples = 50
+  x_values  = [0.5, 1.0, 1.5, 2.0, 2.5]
+  output    = experiments/exp_a/results/gradient_delta.json
+  programs  = ['P1_single_const', 'P2_multi_const', 'P3_recursive', 'P4_higher_order', 'P5_multi_function', 'P6_composed']
+
+============================================================
+Program: P1_single_const
+  Source (direct): (define (f x alpha) (* alpha (* x x)))
+(f x alpha)
+  Params: ['alpha']
+  Compiling direct graph... done (0.01s)
+  Compiling DMCI graph... done (0.05s)
+  Trial   1/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  10/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  20/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  30/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  40/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  50/50: rel_err=0.00e+00  cos_sim=1.00000000
+
+============================================================
+Program: P2_multi_const
+  Source (direct): (define (f x a b) (+ a (* b (* x x))))
+(f x a b)
+  Params: ['a', 'b']
+  Compiling direct graph... done (0.00s)
+  Compiling DMCI graph... done (0.02s)
+  Trial   1/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  10/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  20/50: rel_err=0.00e+00  cos_sim=1.00000012
+  Trial  30/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  40/50: rel_err=0.00e+00  cos_sim=1.00000012
+  Trial  50/50: rel_err=0.00e+00  cos_sim=1.00000000
+
+============================================================
+Program: P3_recursive
+  Source (direct): (define (poly x n alpha)
+  (if (= n 0) 0 (+ (* alpha x) (poly x (- n 1) alpha)))
+  Params: ['alpha']
+  Compiling direct graph... done (0.00s)
+  Compiling DMCI graph... done (0.02s)
+  Trial   1/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  10/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  20/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  30/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  40/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  50/50: rel_err=0.00e+00  cos_sim=1.00000000
+
+============================================================
+Program: P4_higher_order
+  Source (direct): (define (twice f x) (f (f x)))
+(twice (lambda (y) (+ y alpha)) x)
+  Params: ['alpha']
+  Compiling direct graph... done (0.00s)
+  Compiling DMCI graph... done (0.05s)
+  Trial   1/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  10/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  20/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  30/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  40/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  50/50: rel_err=0.00e+00  cos_sim=1.00000000
+
+============================================================
+Program: P5_multi_function
+  Source (direct): (define (f x a) (* a x))
+(define (g x b) (+ b (* x x)))
+(+ (f x a) (g x b))
+  Params: ['a', 'b']
+  Compiling direct graph... done (0.00s)
+  Compiling DMCI graph... done (0.02s)
+  Trial   1/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  10/50: rel_err=0.00e+00  cos_sim=0.99999988
+  Trial  20/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  30/50: rel_err=0.00e+00  cos_sim=0.99999994
+  Trial  40/50: rel_err=0.00e+00  cos_sim=1.00000012
+  Trial  50/50: rel_err=0.00e+00  cos_sim=0.99999994
+
+============================================================
+Program: P6_composed
+  Source (direct): (define (f x a c) (+ (* a (* x x)) c))
+(define (g x b) (+ x b))
+(f (g x b) a c)
+  Params: ['a', 'b', 'c']
+  Compiling direct graph... done (0.00s)
+  Compiling DMCI graph... done (0.02s)
+  Trial   1/50: rel_err=0.00e+00  cos_sim=1.00000012
+  Trial  10/50: rel_err=0.00e+00  cos_sim=0.99999994
+  Trial  20/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  30/50: rel_err=0.00e+00  cos_sim=1.00000000
+  Trial  40/50: rel_err=0.00e+00  cos_sim=1.00000012
+  Trial  50/50: rel_err=0.00e+00  cos_sim=1.00000012
+
+==========================================================================================
+GRADIENT DELTA SUMMARY: DMCI vs. Direct Compilation
+==========================================================================================
+Program                  RelErr Mean    RelErr Max    RelErr Std   CosSim Mean    CosSim Min
+------------------------------------------------------------------------------------------
+P1_single_const             0.00e+00      0.00e+00      0.00e+00    1.00000000    1.00000000
+P2_multi_const              0.00e+00      0.00e+00      0.00e+00    1.00000001    0.99999988
+P3_recursive                0.00e+00      0.00e+00      0.00e+00    1.00000000    1.00000000
+P4_higher_order             0.00e+00      0.00e+00      0.00e+00    1.00000000    1.00000000
+P5_multi_function           0.00e+00      0.00e+00      0.00e+00    0.99999999    0.99999982
+P6_composed                 0.00e+00      0.00e+00      0.00e+00    1.00000000    0.99999982
+------------------------------------------------------------------------------------------
+
+Overall mean relative error:   0.00e+00
+Overall max relative error:    0.00e+00
+Overall mean cosine similarity: 1.00000000
+
+VERDICT: Gradients match to high precision (< 1e-4 relative error).
+DMCI and direct compilation produce numerically equivalent gradients.
+
+Total wall time: 31.1s
+
+Results saved to experiments/exp_a/results/gradient_delta.json

@@ -1,0 +1,21 @@
+# Inventory of experiments/exp_h/results -- committed raw outputs (Git LFS).
+# 19 files. Regenerate/verify with: python3 -m experiments.check_manifests
+bench_diffesm_5147148.err
+bench_diffesm_5147148.out
+bench_diffesm_all.json
+bench_diffsoc_5147177.err
+bench_diffsoc_5147177.out
+bench_diffsoc_5147179.err
+bench_diffsoc_5147179.out
+bench_diffsoc_all.json
+convergence_5147165.err
+convergence_5147165.out
+convergence_cpu.json
+dmci_batched_bench.json
+exp_h_5147138.err
+exp_h_5147138.out
+exp_h_cpu.json
+exp_h_cuda.json
+exp_h_part_e_5147141.err
+exp_h_part_e_5147141.out
+vmap_results.json

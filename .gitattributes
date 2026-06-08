@@ -1,0 +1,15 @@
+# Git LFS — track all experimental data, results, figures, and binary artifacts.
+# Without `git lfs install` + `git lfs pull`, these appear as small pointer files.
+*.csv   filter=lfs diff=lfs merge=lfs -text
+*.json  filter=lfs diff=lfs merge=lfs -text
+*.dat   filter=lfs diff=lfs merge=lfs -text
+*.npz   filter=lfs diff=lfs merge=lfs -text
+*.npy   filter=lfs diff=lfs merge=lfs -text
+*.pkl   filter=lfs diff=lfs merge=lfs -text
+*.pt    filter=lfs diff=lfs merge=lfs -text
+*.pth   filter=lfs diff=lfs merge=lfs -text
+*.ckpt  filter=lfs diff=lfs merge=lfs -text
+*.png   filter=lfs diff=lfs merge=lfs -text
+*.pdf   filter=lfs diff=lfs merge=lfs -text
+*.out   filter=lfs diff=lfs merge=lfs -text
+*.err   filter=lfs diff=lfs merge=lfs -text

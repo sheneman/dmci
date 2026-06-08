@@ -1,0 +1,15 @@
+############################################################
+#
+# DMCI: Compiling scheme into composable and
+#       differentiable neural network representations
+#
+# __init__.py: Package initialization for the experiments.exp_lim_enso module
+#
+# Luke Sheneman
+# Research Computing and Data Services (RCDS)
+# Institute for Interdisciplinary Data Sciences (IIDS)
+# University of Idaho
+# sheneman@uidaho.edu
+#
+############################################################
+

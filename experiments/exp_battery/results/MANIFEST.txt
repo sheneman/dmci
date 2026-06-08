@@ -1,0 +1,75 @@
+============================================================
+DMCI -- Experiment L (battery capacity-fade co-search)
+results/ artifact MANIFEST
+Maps each committed artifact to the manuscript claim it backs.
+Manuscript: paper-arxiv/paper.tex  Section 4.4 (sec:exp_battery) + Appendix R (app:exp_battery_ext)
+============================================================
+
+SEARCH CONFIGURATION (shared by all runs)
+  Outer loop : OpenEvolve (AlphaEvolve-style), 3 islands, 200 iterations/island,
+               qwen3.6 mutator, seeded initial program = the smooth sqrt-t SEI model
+               (openevolve/initial_program.py).
+  Inner loop : DMCI exact-gradient Adam, adam_iters=60 during SEARCH (fast fitness).
+  Re-score   : rigorous adam_iters=300 at BOTH held-out splits
+               (KSPLIT_LATE=70, KSPLIT_EARLY=45) -- exposes any search-time
+               fitness-fidelity flattery (the FluZoo lesson).
+
+----------------------------------------------------------------
+TARGETS
+  target.pt            Synthetic knee-recovery target [1,100,1]; seed-regenerable via
+                       gen_target.py. Sanity target for the structure-recovery claim.
+  target_real.pt       REAL Severson SOH target [117,100,1], grid=lifefrac, EOL SOH=0.80.
+                       Provenance + SHA256 + cell-selection rule: ../data/metadata.json.
+
+----------------------------------------------------------------
+SYNTHETIC RECOVERY  (Sec 4.4, "synthetic" rows)
+  battery_rescore.json
+     iters300 holdout RMSE (the reported, rigorous column):
+       sqrt_seed 0.0301 | two_reservoir_ref 0.0143 | sigmoidal_ref 0.0148
+       evolved_island0 0.0111 | island1 0.0204 | island2 0.0135
+     (iters60 = the under-converged SEARCH fitness, shown for the fidelity contrast.)
+     => all three evolved islands beat the smooth seed (0.0301) under rigorous re-score.
+
+REAL held-out FORECAST SKILL  (Sec 4.4, "real" rows; no ground-truth mechanism, so the
+claim is out-of-sample forecast RMSE on the strided held-out tail)
+  battery_rescore_real_ks70.json   LATE split (fit first 70, forecast tail)
+  battery_rescore_real_ks45.json   EARLY split (fit first 45, forecast tail)
+     Per split: naive {persistence, linear_extrap} floors + the smooth structure
+     families through the SAME DMCI path (sqrt_seed, power_law_ref, stretched_ref) +
+     evolved_island0/1/2 holdout_rmse.
+     Headline: evolved_island2 0.0512 (late) / 0.0646 (early) and island1 0.0267 (late)
+     beat the best smooth hand-baseline; island1 is fragile early (0.167).
+  battery_rescore_real_knee_ks70.json / _ks45.json
+     The two knee-capable HAND baselines on real data (two_reservoir_ref, sigmoidal_ref);
+     sigmoidal_ref 0.0507 (late) is the strongest hand baseline the evolved winners are
+     compared against (island2 ties/edges it; 1.7x better on early).
+
+INNER-FITTER ABLATION  (Sec 4.4 ablation; App R)
+  battery_ablate_inner_ks70.json / _ks45.json
+     Same evolved STRUCTURES, inner fitter swapped DMCI-Adam -> gradient-free differential
+     evolution at matched compute. Per-cell fit is 468 / 702 / 585-dimensional.
+     DE holdout RMSE: island0 1.98/1.76 | island1 0.25/0.21 | island2 0.90/0.92
+     => 9-27x worse than DMCI exact-gradient: the gradient path is load-bearing.
+
+DISTINCT-STRUCTURE FUNNEL  (Sec 4.4 / App R, "distinct structures" counts)
+  funnel_bat_island.json        synthetic: 200 evaluated/island; pooled 119 distinct
+                                structures, 118 novel, 1 matching a reference family.
+  funnel_bat_real_island.json   real:      pooled 160 distinct, 159 novel, 1 reference.
+
+WINNING ISLAND PROGRAMS (the evolved Scheme/DSL structures re-scored above)
+  bat_island_{0,1,2}/best/best_program.py(+_info.json)        synthetic winners
+  bat_real_island_{0,1,2}/best/best_program.py(+_info.json)   real winners
+     bat_real_island_2 is the three-reservoir bottleneck structure the real-data
+     forecast-skill claim rests on (info.json: 5 params, knee_capable=1).
+
+OTHER
+  pilot.json   De-risk pilot (knee-recovery confirmed robust at iters=300) -- not a
+               manuscript number; recorded for provenance of the go/no-go decision.
+
+REGENERATION
+  Synthetic : gen_target.py -> 3x openevolve/slurm_battery_node.sh -> rescore.py / ablate_inner.py / funnel.py
+  Real      : gen_target_real.py (pinned raw, see data/metadata.json) -> run_real_islands.sh
+              -> rescore_real.py (slurm_rescore.sh) / ablate_inner.py / funnel.py
+  All island/re-score runs are HPC (gpu-8); the small JSON summaries + winners committed here
+  are the binding record. Full 200-program island archives are not committed (the funnel JSON
+  summarizes them); re-run the island scripts to regenerate.
