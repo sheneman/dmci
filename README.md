@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="dmci.png" alt="DMCI — Differentiable Meta-Circular Interpreter" width="420">
+</p>
+
 # Neural Compiler
 
 **Compile a self-hosting subset of Scheme into differentiable PyTorch computation graphs - then run gradient descent
