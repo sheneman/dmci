@@ -15,8 +15,8 @@ with no custom gradient code and no per-program recompilation.
 
 This is the software behind two papers:
 
-- **Paper 1 - *The Neural Compiler: Program-to-Network Translation for Hybrid Scientific Machine Learning.*** The
-  original system.
+- **Paper 1 - *[The Neural Compiler: Program-to-Network Translation for Hybrid Scientific Machine Learning](https://arxiv.org/abs/2605.22498).*** The
+  original system ([arXiv:2605.22498](https://arxiv.org/abs/2605.22498)).
 - **Paper 2 - *Compile Once, Differentiate Everywhere: A Differentiable Meta-Circular Interpreter.*** DMCI, the
   recursion/closure-capable differentiable interpreter and its experiments.
 
@@ -274,7 +274,7 @@ so batched training of iterative programs is correct. Full details and the `.ncg
 
 ## Differentiable Meta-Circular Interpretation (DMCI)
 
-The headline capability. The compiler is expressive enough to compile **its own Scheme evaluator**
+The compiler is expressive enough to compile **its own Scheme evaluator**
 (`bootstrap/compiler.scm`, a self-hosted interpreter written in Scheme). That compiled evaluator is itself a
 differentiable PyTorch graph. To run a *target* program, you hand it to the evaluator **as quoted data**:
 
@@ -668,7 +668,10 @@ from neural_compiler.emit import emit_torch_module   # -> source of a standalone
   title        = {The Neural Compiler: Program-to-Network Translation for Hybrid Scientific Machine Learning},
   author       = {Sheneman, Lucas},
   journal      = {arXiv preprint arXiv:2605.22498},
-  year         = {2026}
+  year         = {2026},
+  eprint       = {2605.22498},
+  archivePrefix = {arXiv},
+  url          = {https://arxiv.org/abs/2605.22498}
 }
 
 @article{sheneman_dmci,
