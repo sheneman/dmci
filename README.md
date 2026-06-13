@@ -17,8 +17,8 @@ This is the software behind two papers:
 
 - **Paper 1 - *[The Neural Compiler: Program-to-Network Translation for Hybrid Scientific Machine Learning](https://arxiv.org/abs/2605.22498).*** The
   original system ([arXiv:2605.22498](https://arxiv.org/abs/2605.22498)).
-- **Paper 2 - *Compile Once, Differentiate Everywhere: A Differentiable Meta-Circular Interpreter.*** DMCI, the
-  recursion/closure-capable differentiable interpreter and its experiments.
+- **Paper 2 - *[Compile Once, Differentiate Everywhere: A Differentiable Meta-Circular Interpreter](https://arxiv.org/abs/2606.09930).*** DMCI, the
+  recursion/closure-capable differentiable interpreter and its experiments ([arXiv:2606.09930](https://arxiv.org/abs/2606.09930)).
 
 This repository contains the code, experiments, and data. The manuscripts themselves are distributed separately.
 
@@ -661,7 +661,7 @@ from neural_compiler.emit import emit_torch_module   # -> source of a standalone
 
 ## Citing this work
 
-> Paper 2's arXiv identifier is not yet assigned; please check the repository for updated citation details.
+> Paper 2 (DMCI) is available at [arXiv:2606.09930](https://arxiv.org/abs/2606.09930).
 
 ```bibtex
 @article{sheneman_neural_compiler,
@@ -675,9 +675,13 @@ from neural_compiler.emit import emit_torch_module   # -> source of a standalone
 }
 
 @article{sheneman_dmci,
-  title  = {Compile Once, Differentiate Everywhere: A Differentiable Meta-Circular Interpreter},
-  author = {Sheneman, Lucas},
-  year   = {2026}
+  title        = {Compile Once, Differentiate Everywhere: A Differentiable Meta-Circular Interpreter},
+  author       = {Sheneman, Lucas},
+  journal      = {arXiv preprint arXiv:2606.09930},
+  year         = {2026},
+  eprint       = {2606.09930},
+  archivePrefix = {arXiv},
+  url          = {https://arxiv.org/abs/2606.09930}
 }
 ```
 
